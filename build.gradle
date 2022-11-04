@@ -16,6 +16,12 @@ dependencies {
 
 test {
     useTestNG(){
-        suites "src/test/resources/suites/suite.xml"
+        suites "src/test/resources/suites/parallelsuite.xml"
+        useDefaultListeners true
+    }
+}
+task retest(type: Test) {
+    useTestNG() {
+        suites "build/reports/tests/test/testng-failed.xml"
     }
 }

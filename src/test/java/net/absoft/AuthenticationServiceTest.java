@@ -56,6 +56,7 @@ public class AuthenticationServiceTest {
     Response actualResponse = authenticationService.authenticate("", "password1");
     assertEquals(actualResponse, expectedResponse, "Unexpected response");
     System.out.println("testAuthenticationWithEmptyEmail");
+
   }
 
   @Test (groups = "negative")

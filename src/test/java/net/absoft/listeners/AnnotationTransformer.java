@@ -10,5 +10,6 @@ public class AnnotationTransformer implements IAnnotationTransformer {
     @Override
     public void transform(ITestAnnotation annotation, Class testClass, Constructor testConstructor, Method testMethod) {
     annotation.setDescription("Updated description: " + testMethod.getName());
+    annotation.setRetryAnalyzer(RetryAnalyzer.class);
     }
 }

@@ -8,8 +8,8 @@ import org.testng.annotations.Test;
 import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertTrue;
+
+import static org.testng.Assert.*;
 
 public class AuthenticationServiceTest2 {
     private AuthenticationService authenticationService;
@@ -20,6 +20,12 @@ public class AuthenticationServiceTest2 {
         authenticationService = new AuthenticationService();
     }
 
+    @Test(groups = "parallel")
+    public void testSample() throws InterruptedException {
+        Thread.sleep(2000);
+        System.out.println("testSample: " + new Date());
+        fail("FAILING TEST");
+    }
     @Test(description = "Test Successful Authentication",
     groups = "parallel")
     public void testSuccessfulAuthentication() throws InterruptedException {
@@ -44,7 +50,8 @@ public class AuthenticationServiceTest2 {
         };
     }
     @Test (dataProvider = "invalidLogins",
-            groups = "parallel")
+            groups = "parallel"
+    )
     public void testInvalidAuthentication(String email, String password, Response expectedResponse) throws InterruptedException {
         Response actualResponse = authenticationService.authenticate(email, password);
         assertEquals(actualResponse.getCode(), expectedResponse.getCode(), "Response code should be 400");
