@@ -1,11 +1,14 @@
 package net.absoft;
 
+import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import net.absoft.data.Response;
 import net.absoft.services.AuthenticationService;
 import org.testng.annotations.*;
 import org.testng.asserts.SoftAssert;
+
+import javax.xml.crypto.Data;
 
 import static org.testng.Assert.*;
 
@@ -22,39 +25,20 @@ public class AuthenticationServiceTest {
   }
 
   @Test(groups = "positive")
-  @Parameters ({"email-address", "password"})
-  public void testSuccessfulAuthentication(String email, String password) {
-    Response response = new AuthenticationService().authenticate(email, password);
+ // @Parameters ({"email-address", "password"}) //Uncomment for suite.xml
+  public void testSuccessfulAuthentication(@Optional("user1@test.com") String email,@Optional("password1") String password) throws InterruptedException {
+    Response response = authenticationService.authenticate(email, password);
     assertEquals(response.getCode(), 200, "Response code should be 200");
     assertTrue(validateToken(response.getMessage()),
         "Token should be the 32 digits string. Got: " + response.getMessage());
-    System.out.println("testSuccessfulAuthentication = " + message);
-  }
-@DataProvider(name = "invalidLogins")
-  public Object [][] invalidLogins(){
-    return new Object[][]{
-         new Object[] {"user1@test", "wrong_password1",
-                 new Response(401, "Invalid email or password")},
-         new Object[] {"", "password1",
-                 new Response(400, "Email should not be empty string")},
-            new Object[] {"user1@test", "",
-                    new Response(400, "Password should not be empty string")},
-            new Object[] {"user1", "password1",
-                    new Response(400, "Invalid email")}
-    };
-  }
-  @Test (
-          groups = "negative",
-          dataProvider = "invalidLogins"
-  )
-  public void testInvalidAuthentication(String email, String password, Response expectedResponse) {
-    Response actualResponse = authenticationService.authenticate(email, password);
-    assertEquals(actualResponse.getCode(), expectedResponse.getCode(), "Response code should be 400");
-    assertEquals(actualResponse.getMessage(), expectedResponse.getMessage(),  "Invalid email or password");
-    System.out.println("testInvalidAuthentication");
+    Thread.sleep(2000);
+    System.out.println("testSuccessfulAuthentication");
+//System.out.println("testSuccessfulAuthentication = " + message ); //For DummyTestFactory
+
   }
 
   @Test (groups = "negative")
+
   public void testAuthenticationWithWrongPassword() {
     Response response = authenticationService
             .authenticate("user1@test.com", "wrong_password1");
@@ -72,8 +56,6 @@ public class AuthenticationServiceTest {
     Response actualResponse = authenticationService.authenticate("", "password1");
     assertEquals(actualResponse, expectedResponse, "Unexpected response");
     System.out.println("testAuthenticationWithEmptyEmail");
-
-
   }
 
   @Test (groups = "negative")

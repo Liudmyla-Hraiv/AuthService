@@ -2,12 +2,12 @@
 
 <suite name="positive">
     <test name="authServiceTest" >
-        <parameter name="email-address" value="user1@test.com"></parameter>
-        <parameter name="password" value="password1"></parameter>
+<!--        <parameter name="email-address" value="user1@test.com"></parameter>-->
+<!--        <parameter name="password" value="password1"></parameter>-->
         <groups>
             <run>
-                <include name="positive">
-                </include>
+                <exclude name="negative"/>
+                <exclude name="parallel"/>
             </run>
         </groups>
     </test>
@@ -16,3 +16,6 @@
         <package name="net.absoft"></package>
     </packages>
 </suite>
+
+<!--        Uncomment @Parameter line, -->
+<!--        Delete @Optional-->

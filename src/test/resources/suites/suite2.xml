@@ -4,14 +4,14 @@
     <test name="authServiceTest" >
         <groups>
             <run>
-                <include name="negative">
-                </include>
+                <exclude name="positive"/>
+                <exclude name="parallel"/>
             </run>
         </groups>
     </test>
     <packages>
-        <package name="net.absoft"></package>
+        <package name="net.absoft"/>
     </packages>
 </suite>
 
- // Но при такому запуску викидує помилку, що String не може бути null, і тести падають.
+<!--      Uncomment  groups = "negative" line-->

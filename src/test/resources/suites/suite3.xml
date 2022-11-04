@@ -3,12 +3,8 @@
 <suite name="full">
     <test name="authServiceTest" >
         <groups>
-            <define name="all">
-                <include name="positive"/>
-                <include name="negative"/>
-            </define>
             <run>
-                <include name="all"/>
+                <exclude name="parallel"/>
             </run>
         </groups>
     </test>
@@ -17,5 +13,4 @@
     </packages>
 </suite>
 
-// Но при такому запуску викидує помилку, що String не може бути null, і тести падають.
-       // negative
+
