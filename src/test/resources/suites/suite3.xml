@@ -16,3 +16,6 @@
         <package name="net.absoft"></package>
     </packages>
 </suite>
+
+// Но при такому запуску викидує помилку, що String не може бути null, і тести падають.
+       // negative

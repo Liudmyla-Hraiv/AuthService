@@ -4,27 +4,54 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import net.absoft.data.Response;
 import net.absoft.services.AuthenticationService;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
+import org.testng.annotations.*;
 import org.testng.asserts.SoftAssert;
 
 import static org.testng.Assert.*;
 
 public class AuthenticationServiceTest {
-  private AuthenticationService authenticationService;
 
-  @BeforeMethod
+  private String message;
+  private AuthenticationService authenticationService;
+  public AuthenticationServiceTest (String message) {
+    this.message=message;
+  }
+  @BeforeMethod()
   public void setUp() {
     authenticationService = new AuthenticationService();
   }
 
   @Test(groups = "positive")
-  public void testSuccessfulAuthentication() {
-    Response response = authenticationService.authenticate("user1@test.com", "password1");
+  @Parameters ({"email-address", "password"})
+  public void testSuccessfulAuthentication(String email, String password) {
+    Response response = new AuthenticationService().authenticate(email, password);
     assertEquals(response.getCode(), 200, "Response code should be 200");
     assertTrue(validateToken(response.getMessage()),
         "Token should be the 32 digits string. Got: " + response.getMessage());
-    System.out.println("testSuccessfulAuthentication");
+    System.out.println("testSuccessfulAuthentication = " + message);
+  }
+@DataProvider(name = "invalidLogins")
+  public Object [][] invalidLogins(){
+    return new Object[][]{
+         new Object[] {"user1@test", "wrong_password1",
+                 new Response(401, "Invalid email or password")},
+         new Object[] {"", "password1",
+                 new Response(400, "Email should not be empty string")},
+            new Object[] {"user1@test", "",
+                    new Response(400, "Password should not be empty string")},
+            new Object[] {"user1", "password1",
+                    new Response(400, "Invalid email")}
+    };
+  }
+  @Test (
+          groups = "negative",
+          dataProvider = "invalidLogins"
+  )
+  public void testInvalidAuthentication(String email, String password, Response expectedResponse) {
+    Response actualResponse = authenticationService.authenticate(email, password);
+    assertEquals(actualResponse.getCode(), expectedResponse.getCode(), "Response code should be 400");
+    assertEquals(actualResponse.getMessage(), expectedResponse.getMessage(),  "Invalid email or password");
+    System.out.println("testInvalidAuthentication");
   }
 
   @Test (groups = "negative")
@@ -46,10 +73,7 @@ public class AuthenticationServiceTest {
     assertEquals(actualResponse, expectedResponse, "Unexpected response");
     System.out.println("testAuthenticationWithEmptyEmail");
 
-//    Response response = new AuthenticationService().authenticate("", "password1");
-//    assertEquals(response.getCode(), 400, "Response code should be 400");
-//    assertEquals(response.getMessage(), "Email should not be empty string",
-//        "Response message should be \"Email should not be empty string\"");
+
   }
 
   @Test (groups = "negative")
