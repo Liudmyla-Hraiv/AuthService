@@ -19,10 +19,12 @@ public class AuthenticationServiceTest {
   public AuthenticationServiceTest (String message) {
     this.message=message;
   }
-  @BeforeMethod()
+
+  @BeforeMethod(groups = {"positive", "negative"})
   public void setUp() {
     authenticationService = new AuthenticationService();
   }
+
 
   @Test(groups = "positive")
  // @Parameters ({"email-address", "password"}) //Uncomment for suite.xml
@@ -38,7 +40,6 @@ public class AuthenticationServiceTest {
   }
 
   @Test (groups = "negative")
-
   public void testAuthenticationWithWrongPassword() {
     Response response = authenticationService
             .authenticate("user1@test.com", "wrong_password1");

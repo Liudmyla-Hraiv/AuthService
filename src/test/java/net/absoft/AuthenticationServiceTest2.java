@@ -15,7 +15,7 @@ public class AuthenticationServiceTest2 {
     private AuthenticationService authenticationService;
 
 
-    @BeforeMethod()
+    @BeforeMethod(groups = "parallel")
     public void setUp() {
         authenticationService = new AuthenticationService();
     }
